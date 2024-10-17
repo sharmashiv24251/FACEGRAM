@@ -2,7 +2,10 @@
 const nextConfig = {
   experimental: {
     reactCompiler: true,
-    ppr: 'incremental'
+    ppr: "incremental",
+  },
+  images: {
+    domains: ["images.pexels.com"],
   },
 };
 
