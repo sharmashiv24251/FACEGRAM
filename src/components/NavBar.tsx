@@ -81,7 +81,7 @@ const Navbar = () => {
             <UserButton />
           </SignedIn>
           <SignedOut>
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-sm max-sm:mr-5">
               <Image src="/noAvatar.png" alt="" width={20} height={20} />
               <Link href="/sign-in">Login/Register</Link>
             </div>
