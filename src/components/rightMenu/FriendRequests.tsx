@@ -1,8 +1,27 @@
+import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import FriendRequestList from "./FriendRequestList";
 
-const FriendRequests = () => {
+const FriendRequests = async () => {
+  const { userId } = auth();
+
+  if (!userId) return null;
+
+  const requests = await prisma.followRequest.findMany({
+    where: {
+      receiverId: userId,
+    },
+    include: {
+      sender: true,
+    },
+  });
+
+  // if (!requests) return null;
+  // if (requests.length === 0) return null;
+
   return (
     <div className="p-4 bg-white shadow-md rounded-lg text-sm flex flex-col gap-4">
       {/* TOP */}
@@ -13,96 +32,7 @@ const FriendRequests = () => {
         </Link>
       </div>
       {/* User */}
-      <div className="flex items-center justify-between">
-        <div className="font-semibold flex items-center gap-4">
-          <Image
-            alt=""
-            height={40}
-            width={40}
-            src={
-              "https://images.pexels.com/photos/12918397/pexels-photo-12918397.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-            }
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <span>Shivansh sharma</span>
-        </div>
-        <div className="flex gap-3 justify-end">
-          <Image
-            alt=""
-            height={20}
-            width={20}
-            src={"/accept.png"}
-            className="cursor-pointer"
-          />
-          <Image
-            alt=""
-            height={20}
-            width={20}
-            src={"/reject.png"}
-            className="cursor-pointer"
-          />
-        </div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="font-semibold flex items-center gap-4">
-          <Image
-            alt=""
-            height={40}
-            width={40}
-            src={
-              "https://images.pexels.com/photos/12918397/pexels-photo-12918397.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-            }
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <span>Shivansh sharma</span>
-        </div>
-        <div className="flex gap-3 justify-end">
-          <Image
-            alt=""
-            height={20}
-            width={20}
-            src={"/accept.png"}
-            className="cursor-pointer"
-          />
-          <Image
-            alt=""
-            height={20}
-            width={20}
-            src={"/reject.png"}
-            className="cursor-pointer"
-          />
-        </div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="font-semibold flex items-center gap-4">
-          <Image
-            alt=""
-            height={40}
-            width={40}
-            src={
-              "https://images.pexels.com/photos/12918397/pexels-photo-12918397.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-            }
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <span>Shivansh sharma</span>
-        </div>
-        <div className="flex gap-3 justify-end">
-          <Image
-            alt=""
-            height={20}
-            width={20}
-            src={"/accept.png"}
-            className="cursor-pointer"
-          />
-          <Image
-            alt=""
-            height={20}
-            width={20}
-            src={"/reject.png"}
-            className="cursor-pointer"
-          />
-        </div>
-      </div>
+      <FriendRequestList requests={requests} />
     </div>
   );
 };
